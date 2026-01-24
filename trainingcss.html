@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* നമ്മൾ സ്റ്റൈൽ ഇവിടെയാണ് എഴുതാൻ പോകുന്നത് */
+        body {
+            display: flex;
+            justify-content: center; /* ബോക്സ് നടുവിൽ വരാൻ */
+            padding-top: 100px;
+        }
+        .box {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            cursor: pointer;
+            transition: background-color  2s
+        }
+
+        .box:hover{
+          background-color: blue;
+          transform: rotate(45deg);
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+</body>
+</html>

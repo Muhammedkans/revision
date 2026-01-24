@@ -1,0 +1,273 @@
+:root{
+  --primary:#0ea5e9;
+  --secondary:#6366f1;
+  --bg:#ffffff;
+  --text:#111827;
+  --transition:all 0.3s ease
+}
+
+
+
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  font-family: 'Popins',sans-serif;
+}
+
+
+html{
+  scroll-behavior: smooth;
+}
+
+body{
+  background-color: #ffffff;
+  color:#111827;
+  line-height: 1.6;
+}
+
+
+.header{
+  position:fixed;
+   top:0;
+   width: 100%;
+   padding: 20px 0;
+     background-color: rgba(255, 255, 255, 0.8); 
+     backdrop-filter: blur(10px);
+     z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+}
+
+
+.nav{
+  max-width: 1100px;
+  margin:0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+   align-items: center;
+}
+
+
+
+
+.nav__logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary); /* നമ്മുടെ ബ്ലൂ ബക്കറ്റിലെ കളർ */
+    text-decoration: none;
+}
+
+
+
+
+
+.nav__list {
+    display: flex;
+    gap: 30px; /* ലിങ്കുകൾക്കിടയിൽ ഗ്യാപ്പ് വരാൻ (Flexbox magic!) */
+    list-style: none;
+}
+
+
+
+.nav__link {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+
+.nav__link:hover {
+    color: var(--primary);
+}
+
+.nav__mode {
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+
+
+.hero{
+  height: 100vh;
+  display:flex;
+  flex-direction: column;
+justify-content: center; 
+ align-items: center;  
+ text-align: center;
+ padding: 0 20px;
+  background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.05), transparent);
+}
+
+
+
+
+.hero__title {
+    font-size: 4rem; /* വലിയ അക്ഷരം */
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--text);
+    /* ആനിമേഷൻ വിളിക്കുന്നു */
+    
+
+    /* ആനിമേഷൻ വിളിക്കുന്നു */
+    animation: fadeInUp 1s ease;
+}
+
+
+
+.hero__accent {
+    color: var(--primary); /* നമ്മുടെ മെയിൻ ബ്ലൂ */
+}
+
+
+
+
+.hero__subtitle {
+    font-size: 1.2rem;
+    color: #64748b;
+    max-width: 600px;
+    margin-bottom: 30px;
+    /* ഇത് കുറച്ചു വൈകി വരാൻ (Delay) */
+    animation: fadeInUp 1s ease 0.2s backwards;
+}
+
+
+
+.hero__btn {
+    text-decoration: none;
+    background-color: var(--primary);
+    color: white;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+    transition: var(--transition);
+    animation: fadeInUp 1s ease 0.4s backwards;
+}
+
+.hero__btn:hover {
+    transform: translateY(-5px); /* മുകളിലേക്ക് പൊങ്ങാൻ */
+    box-shadow: 0 15px 30px rgba(14, 165, 233, 0.4);
+}
+
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px); /* 30px താഴെ നിന്ന് തുടങ്ങുന്നു */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);    /* കൃത്യം സ്ഥലത്ത് എത്തുന്നു */
+    }
+}
+
+
+
+
+
+.projects {
+    max-width: 1100px;
+    margin: 80px auto; /* മുകളിലും താഴെയും നല്ല സ്പേസ് */
+    padding: 0 20px;
+}
+.projects__title {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    text-align: center;
+}
+/* 💠 THE GRID ENGINE 💠 */
+.projects__grid {
+    display: grid;
+    /* "എനിക്ക് 1fr വീതമുള്ള 3 കോളങ്ങൾ വേണം" */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; /* ബോക്സുകൾ തമ്മിലുള്ള അകലം */
+}
+/* 📦 CARD DESIGN */
+.project-card {
+    background-color: #f8fafc;
+    border-radius: 20px;
+    overflow: hidden; /* ചിത്രം ബോക്സിന് പുറത്തു പോകാതിരിക്കാൻ */
+    transition: var(--transition);
+    border: 1px solid #e2e8f0;
+}
+.project-card:hover {
+    transform: translateY(-10px); /* തൊടുമ്പോൾ പൊങ്ങാൻ */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+}
+.project-card__image {
+    height: 200px;
+    background-color: #cbd5e1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #64748b;
+}
+.project-card__content {
+    padding: 20px;
+}
+.project-card__name {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+.project-card__desc {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+/* 📱 RESPONSIVE DESIGN (വെള്ളം പോലെ മാറാൻ!) */
+@media (max-width: 768px) {
+    .projects__grid {
+        /* മൊബൈലിൽ 1 കോളം മതി (താഴെ താഴെ വരാൻ) */
+        grid-template-columns: 1fr; 
+    }
+    
+    .hero__title {
+        font-size: 2.5rem; /* മൊബൈലിൽ അക്ഷരം ചെറുതാക്കുന്നു */
+    }
+}
+
+
+
+
+.contact {
+    padding: 100px 20px;
+    background-color: var(--card-bg); /* നമ്മുടെ ബക്കറ്റിലെ വേരിയബിൾ */
+    text-align: center;
+    margin-top: 50px;
+}
+.contact__title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+.contact__desc {
+    max-width: 500px;
+    margin: 0 auto 40px;
+    color: #64748b;
+}
+.contact__btn {
+    display: inline-block;
+    padding: 15px 40px;
+    background-color: var(--text); /* അക്ഷരത്തിന്റെ അതേ കടുപ്പമുള്ള നിറം */
+    color: var(--bg);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+.contact__btn:hover {
+    transform: scale(1.05); /* ചെറുതായി വലുതാകുന്നു */
+    background: var(--primary);
+}
+.footer {
+    margin-top: 80px;
+    font-size: 0.9rem;
+    opacity: 0.6;
+}

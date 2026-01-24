@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+ <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+
+  <header class="header">
+
+    <nav class="nav">
+      <a href="#" class="nav__logo">MK</a>
+      <ul class="nav__list">
+        <li><a href="#home" class="nav__link">Home</a></li>
+        <li><a href="#project" class="nav__link">project</a></li>
+        <li><a href="#contact" class="nav__link">contact</a></li>
+          <li class="nav__mode" id="modeBtn">🌙</li>
+      </ul>
+
+    </nav>
+
+  </header>
+
+  <section class="hero" id="home">
+    <h1 class="hero__title">
+Building Digital
+<br>
+<span class="hero__accent"> Experiences</span>
+    </h1>
+
+
+    <p class="hero__subtitle">
+
+  I am a Professional UI Engineer specializing in clean code and modern aesthetic designs.
+    </p>
+    <a href="#projects" class="hero__btn">View my work</a>
+
+  </section>
+
+
+
+
+
+  <section class="projects" id="projects">
+    <h2 class="projects__title">My Selected Works</h2>
+    
+    <!-- ഗ്രിഡ് കണ്ടെയ്നർ (BLOCK) -->
+    <div class="projects__grid">
+        
+        <!-- ഒന്നാമത്തെ പ്രോജക്റ്റ് (ELEMENT) -->
+        <div class="project-card">
+            <div class="project-card__image">Project 1</div>
+            <div class="project-card__content">
+                <h3 class="project-card__name">E-Commerce App</h3>
+                <p class="project-card__desc">A clean shopping experience built with modern CSS.</p>
+            </div>
+        </div>
+        <!-- രണ്ടാമത്തെ പ്രോജക്റ്റ് -->
+        <div class="project-card">
+            <div class="project-card__image">Project 2</div>
+            <div class="project-card__content">
+                <h3 class="project-card__name">AI Dashboard</h3>
+                <p class="project-card__desc">Visualizing data with beautiful charts and grids.</p>
+            </div>
+        </div>
+        <!-- മൂന്നാമത്തെ പ്രോജക്റ്റ് -->
+        <div class="project-card">
+            <div class="project-card__image">Project 3</div>
+            <div class="project-card__content">
+                <h3 class="project-card__name">Social Platform</h3>
+                <p class="project-card__desc">A dark-themed social app with smooth animations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="contact" id="contact">
+    <h2 class="contact__title">Get In Touch</h2>
+    <p class="contact__desc">
+        Have a project in mind? Let's build something amazing together.
+    </p>
+    <!-- കോൺടാക്ട് ബട്ടൺ -->
+    <a href="demo" class="contact__btn">Say Hello</a>
+    
+    <div class="footer">
+        <p>&copy; 2024 Azna. Built with Passion.</p>
+    </div>
+</section>
+
+
+
+<script>
+    // 1. ബട്ടണും ബോഡിയും തിരഞ്ഞെടുക്കുന്നു
+    const modeBtn = document.getElementById('modeBtn');
+    const body = document.body;
+    // 2. ബട്ടണിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ എന്ത് സംഭവിക്കണം?
+    modeBtn.addEventListener('click', () => {
+        // ബോഡിയിൽ 'dark' എന്ന ക്ലാസ് ഉണ്ടെങ്കിൽ നീക്കം ചെയ്യും, ഇല്ലെങ്കിൽ ചേർക്കും
+        body.classList.toggle('dark');
+        // ബട്ടണിലെ ഐക്കൺ മാറ്റാം
+        if (body.classList.contains('dark')) {
+            modeBtn.innerText = '☀️'; // ഡാർക്ക് മോഡിൽ സൂര്യൻ കാണിക്കണം
+        } else {
+            modeBtn.innerText = '🌙'; // ലൈറ്റ് മോഡിൽ ചന്ദ്രൻ
+        }
+    });
+</script>
+</body>
+</html>
