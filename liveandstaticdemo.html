@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Mastery: Live vs Static Deep Dive</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    h1 {
+      text-align: center;
+      background: linear-gradient(to right, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+    .stat-card h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    .stat-card .value {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    .stat-card.live .value {
+      color: var(--success);
+    }
+    .stat-card.static .value {
+      color: var(--danger);
+    }
+    .item-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 2rem 0;
+      min-height: 100px;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 0.5rem;
+    }
+    .box {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-add {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-add:hover {
+      background: #4f46e5;
+      transform: translateY(-2px);
+    }
+    .explanation {
+      margin-top: 2rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+    .code-box {
+      background: #000;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-family: monospace;
+      color: #fca5a5;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DOM Mastery Lab</h1>
+    <div class="stats-grid">
+      <div class="stat-card live">
+        <h3>HTMLCollection (LIVE)</h3>
+        <div class="value" id="live-count">0</div>
+        <small>Updates automatically</small>
+      </div>
+      <div class="stat-card static">
+        <h3>NodeList (STATIC)</h3>
+        <div class="value" id="static-count">0</div>
+        <small>Remains a snapshot</small>
+      </div>
+    </div>
+    <div class="item-list" id="main-container">
+      <!-- Items will appear here -->
+      <div class="box my-item">1</div>
+      <div class="box my-item">2</div>
+      <div class="box my-item">3</div>
+    </div>
+    <div class="controls">
+      <button class="btn-add" onclick="addNewItem()">➕ Add New Box</button>
+      <button style="background: #334155; color: white;" onclick="refreshStatic()">📸 Take New Snapshot</button>
+    </div>
+    <div class="explanation">
+      <p><strong>Spoon-Feeding Deep Dive:</strong></p>
+      <p>1. <span style="color: var(--success)">LIVE list</span> is like a CCTV camera. As soon as you click "Add New
+        Box", the number above changes <strong>instantly</strong> because JavaScript is still connected to the DOM.</p>
+      <p>2. <span style="color: var(--danger)">STATIC list</span> is like a photo. It was taken when the page loaded.
+        Even if you add 100 boxes, this number will <strong>not change</strong> until you take a "New Snapshot".</p>
+      <div class="code-box">
+        // Live<br>
+        const live = document.getElementsByClassName('my-item');<br><br>
+        // Static<br>
+        const static = document.querySelectorAll('.my-item');
+      </div>
+    </div>
+  </div>
+  <script>
+    // STEP 1: INITIALIZE THE LISTS
+    // ----------------------------
+    // This is LIVE. It's an "active link" to the DOM.
+    const liveList = document.getElementsByClassName('my-item');
+    // This is STATIC. It's just a regular array-like snapshot.
+    let staticList = document.querySelectorAll('.my-item');
+    const liveCountDisplay = document.getElementById('live-count');
+    const staticCountDisplay = document.getElementById('static-count');
+    const container = document.getElementById('main-container');
+    // Function to update the numbers on the screen
+    function updateUI() {
+      liveCountDisplay.innerText = liveList.length;
+      staticCountDisplay.innerText = staticList.length;
+    }
+    // STEP 2: ADDING AN ITEM
+    function addNewItem() {
+      const currentCount = container.children.length;
+      const newBox = document.createElement('div');
+      newBox.className = 'box my-item';
+      newBox.innerText = currentCount + 1;
+      container.appendChild(newBox);
+      // MAGIC ALERT: 
+      // We DON'T update 'liveList'. It updates itself!
+      // We DON'T update 'staticList'. It stays the same!
+      updateUI();
+    }
+    // STEP 3: MANUAL REFRESH FOR STATIC
+    function refreshStatic() {
+      // To update a static list, you MUST query the DOM again.
+      staticList = document.querySelectorAll('.my-item');
+      updateUI();
+    }
+    // Initial UI Update
+    updateUI();
+  </script>
+</body>
+</html>
