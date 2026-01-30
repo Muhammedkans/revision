@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Performance Mastery: The Rocket Speed Lab</title>
+  <style>
+    :root {
+      --primary: #8b5cf6;
+      --bg: #030712;
+      --card: #111827;
+      --text: #f3f4f6;
+      --red: #ef4444;
+      --green: #22c55e;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      text-align: center;
+      background: linear-gradient(to right, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2.5rem;
+    }
+    .timer-display {
+      display: flex;
+      justify-content: space-around;
+      margin: 2rem 0;
+      font-family: monospace;
+    }
+    .time-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      text-align: center;
+      flex: 1;
+      margin: 0 0.5rem;
+    }
+    .time-card span {
+      font-size: 1.5rem;
+      display: block;
+      font-weight: bold;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    button {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: 0.2s;
+    }
+    .btn-bad {
+      background: var(--red);
+    }
+    .btn-good {
+      background: var(--green);
+    }
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+    #user-list {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #1f2937;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background: #000;
+    }
+    .list-item {
+      background: #1f2937;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      text-align: center;
+      border-left: 3px solid var(--primary);
+    }
+    .lesson {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-top: 2rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DOM Performance Lab 🚀</h1>
+    <div class="timer-display">
+      <div class="time-card">
+        <small>Junior Method Take:</small>
+        <span id="bad-time" style="color: var(--red);">0 ms</span>
+      </div>
+      <div class="time-card">
+        <small>Senior Method Take:</small>
+        <span id="good-time" style="color: var(--green);">0 ms</span>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn-bad" onclick="badUpdate()">❌ 1000 Appends (Slow)</button>
+      <button class="btn-good" onclick="goodUpdate()">🚀 Fragment (Rocket)</button>
+    </div>
+    <div id="user-list">
+      <!-- Items injected here -->
+    </div>
+    <div class="lesson">
+      <h3>🔬 The Deep Dive Lesson:</h3>
+      <p><strong>The Problem (The Junior Way):</strong> Every time you call <code>appendChild()</code> on the main
+        screen, the Browser does a <strong>Reflow</strong> (Recalculates positions) and a <strong>Repaint</strong>
+        (Re-draws colors). Doing this 1000 times is like calling a painter 1000 times to paint one dot each time.</p>
+      <p><strong>The Solution (The Senior Way):</strong> <code>DocumentFragment</code> is a "Virtual Tray". You put all
+        1000 dots on the tray in memory (Offline). Then, you put the whole tray on the wall in <strong>one single
+          move</strong>. The browser only reflows/repaints ONCE!</p>
+    </div>
+  </div>
+  <script>
+    const list = document.getElementById('user-list');
+    const badTimeDisplay = document.getElementById('bad-time');
+    const goodTimeDisplay = document.getElementById('good-time');
+    // ❌ THE BAD REFLOW WAY
+    function badUpdate() {
+      list.innerHTML = ''; // Clear
+      const startTime = performance.now();
+      for (let i = 0; i < 1000; i++) {
+        const li = document.createElement('div');
+        li.className = 'list-item';
+        li.textContent = `User ${i}`;
+        // ⚠️ THE CRIME: 1000 trips to the screen
+        list.appendChild(li);
+      }
+      const endTime = performance.now();
+      badTimeDisplay.innerText = `${(endTime - startTime).toFixed(2)} ms`;
+    }
+    // ✅ THE ROCKET FRAGMENT WAY
+    function goodUpdate() {
+      list.innerHTML = ''; // Clear
+      const startTime = performance.now();
+      // 1. Create the Virtual Tray (Offline)
+      const fragment = document.createDocumentFragment();
+      for (let i = 0; i < 1000; i++) {
+        const li = document.createElement('div');
+        li.className = 'list-item';
+        li.textContent = `User ${i}`;
+        // 2. Add to the TRAY, not the screen
+        fragment.appendChild(li);
+      }
+      // 3. One single move to the screen
+      list.appendChild(fragment);
+      const endTime = performance.now();
+      goodTimeDisplay.innerText = `${(endTime - startTime).toFixed(2)} ms`;
+    }
+  </script>
+</body>
+</html>

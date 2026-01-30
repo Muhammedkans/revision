@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senior DOM Mastery: Security & Performance</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --bg: #020617;
+      --card-bg: #0f172a;
+      --text: #f8fafc;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .lab-container {
+      max-width: 900px;
+      width: 100%;
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 0 50px rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      background: linear-gradient(to right, #818cf8, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+    .security-zone {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .panel {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .panel h3 {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .junior {
+      color: var(--danger);
+    }
+    .senior {
+      color: var(--success);
+    }
+    #output-box {
+      min-height: 150px;
+      background: #000;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      border: 2px dashed #334155;
+    }
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 1rem;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      color: white;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    button {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .btn-junior {
+      background: var(--danger);
+      color: white;
+    }
+    .btn-senior {
+      background: var(--success);
+      color: white;
+    }
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    .premium-title {
+      color: #818cf8;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0;
+      padding: 0.5rem;
+      border-left: 4px solid var(--primary);
+      background: rgba(99, 102, 241, 0.1);
+    }
+    .status-msg {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      padding: 0.75rem;
+      border-radius: 0.4rem;
+      display: none;
+    }
+    .hack-alert {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      display: block;
+      border: 1px solid var(--danger);
+    }
+    .safe-alert {
+      background: rgba(34, 197, 94, 0.2);
+      color: #bbf7d0;
+      display: block;
+      border: 1px solid var(--success);
+    }
+    .explanation-text {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+    code {
+      color: #f472b6;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="lab-container">
+    <h1>Modification & Security Lab</h1>
+    <div class="input-group">
+      <label>Try to type something (or try a "Hack" code):</label>
+      <input type="text" id="user-input" placeholder="e.g. Welcome Home or <img src=x onerror=alert('Hacked!')>">
+    </div>
+    <div class="controls">
+      <button class="btn-junior" onclick="juniorAdd()">❌ Add via innerHTML (Junior)</button>
+      <button class="btn-senior" onclick="seniorAdd()">✅ Add via createElement (Senior)</button>
+    </div>
+    <div id="status" class="status-msg"></div>
+    <div class="security-zone">
+      <div class="panel">
+        <h3 class="junior">Junior Way Result</h3>
+        <p style="font-size: 0.8rem;">Uses <code>.innerHTML</code>. Browser parses strings as code.</p>
+        <div id="junior-output"
+          style="border: 1px solid var(--danger); padding: 10px; min-height: 50px; border-radius: 5px;"></div>
+      </div>
+      <div class="panel">
+        <h3 class="senior">Senior Way Result</h3>
+        <p style="font-size: 0.8rem;">Uses <code>.textContent</code>. Browser treats everything as text.</p>
+        <div id="senior-output"
+          style="border: 1px solid var(--success); padding: 10px; min-height: 50px; border-radius: 5px;"></div>
+      </div>
+    </div>
+    <div class="explanation-text">
+      <h3>Why is the Senior Way 10x Better?</h3>
+      <ul>
+        <li><strong>Security (XSS):</strong> <code>innerHTML</code> can execute malicious scripts if the input comes
+          from a user. <code>textContent</code> is 100% safe.</li>
+        <li><strong>Performance:</strong> <code>innerHTML</code> forces the browser to re-build the entire DOM tree
+          inside that element. <code>createElement</code> only adds one node.</li>
+        <li><strong>Maintainability:</strong> Adding classes via <code>classList</code> is better than inline styles.
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    const input = document.getElementById('user-input');
+    const juniorOutput = document.getElementById('junior-output');
+    const seniorOutput = document.getElementById('senior-output');
+    const status = document.getElementById('status');
+    function juniorAdd() {
+      const val = input.value || "No Input";
+      // ❌ THE JUNIOR WAY
+      // Danger: If val is "<img src=x onerror=alert(1)>", it will execute!
+      juniorOutput.innerHTML = `<h1 class="premium-title">${val}</h1>`;
+      status.innerHTML = "⚠️ <strong>WARNING:</strong> innerHTML processed the string as HTML code.";
+      status.className = "status-msg hack-alert";
+    }
+    function seniorAdd() {
+      const val = input.value || "No Input";
+      // ✅ THE SENIOR WAY
+      // 1. Create the element dedicatedly
+      const h1 = document.createElement('h1');
+      // 2. Set content safely (Treats HTML tags as just text)
+      h1.textContent = val;
+      // 3. Style it properly via CSS classes
+      h1.classList.add('premium-title');
+      // 4. Inject it into the DOM
+      seniorOutput.innerHTML = ''; // Clear old content first
+      seniorOutput.appendChild(h1);
+      status.innerHTML = "⭐ <strong>SUCCESS:</strong> createElement & textContent blocked any script execution.";
+      status.className = "status-msg safe-alert";
+    }
+  </script>
+</body>
+</html>

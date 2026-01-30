@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senior DOM Mastery: Event Delegation & Bubbling</title>
+  <style>
+    :root {
+      --primary: #f59e0b;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --accent: #10b981;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--card);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    h1 {
+      text-align: center;
+      background: linear-gradient(to right, #fbbf24, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2.5rem;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-item b {
+      font-size: 1.5rem;
+      color: var(--primary);
+      display: block;
+    }
+    #parent-ul {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    li {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: 0.3s;
+    }
+    li:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    span.user-name {
+      font-weight: 500;
+    }
+    button.delete-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    button.delete-btn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+    .visualizer {
+      background: #000;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-family: monospace;
+      color: #10b981;
+      margin-top: 1rem;
+      height: 100px;
+      overflow-y: auto;
+      border: 1px solid #334155;
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .btn-main {
+      flex: 1;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      background: var(--primary);
+      color: #000;
+    }
+    .highlight-parent {
+      border: 2px solid var(--primary) !important;
+      box-shadow: 0 0 15px var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Event Delegation Lab 🎯</h1>
+    <div class="stats">
+      <div class="stat-item">
+        <small>Active Listeners</small>
+        <b id="listener-count">1</b>
+      </div>
+      <div class="stat-item">
+        <small>Total Items</small>
+        <b id="item-count">0</b>
+      </div>
+    </div>
+    <div class="visualizer" id="log">
+      > Click a button to see event bubbling...
+    </div>
+    <ul id="parent-ul">
+      <!-- Items will be added here -->
+    </ul>
+    <div class="controls">
+      <button class="btn-main" onclick="add10Items()">➕ Add 10 Dynamic Items</button>
+    </div>
+    <div style="margin-top: 2rem; font-size: 0.9rem; color: #94a3b8; line-height: 1.6;">
+      <h3>📖 The Deep Dive Cheat Sheet:</h3>
+      <p>1. <b>Event Bubbling:</b> Clicked on the <code style="color:red">Button</code>? The click doesn't stop there.
+        It travels up to the <code style="color:orange">LI</code>, then to the <code style="color:yellow">UL</code>,
+        then to the <code style="color:green">Body</code>!</p>
+      <p>2. <b>Delegation:</b> Instead of putting a "Guard" (Listener) at every door (Button), we put ONE "Security
+        Camera" at the main gate (UL). It catches everyone! 🎥</p>
+    </div>
+  </div>
+  <script>
+    const parentUl = document.getElementById('parent-ul');
+    const listenerCount = document.getElementById('listener-count');
+    const itemCount = document.getElementById('item-count');
+    const logBox = document.getElementById('log');
+    function log(msg) {
+      const time = new Date().toLocaleTimeString().split(' ')[0];
+      logBox.innerHTML = `<div>[${time}] ${msg}</div>` + logBox.innerHTML;
+    }
+    // --- THE SENIOR WAY (Event Delegation) ---
+    // We add the listener ONCE to the parent, even before items exist!
+    parentUl.addEventListener('click', (event) => {
+      log(`Event hit UL (Bubbled up from: ${event.target.tagName})`);
+      // 1. Identify: Check if the actually clicked thing (target) is a button
+      if (event.target.tagName === 'BUTTON') {
+        const button = event.target;
+        log(`🎯 TARGET REACHED: ${button.textContent} clicked!`);
+        // 2. Traversal: Find the parent <li> to remove it
+        const liToRemove = button.parentElement;
+        liToRemove.style.opacity = '0';
+        setTimeout(() => {
+          liToRemove.remove();
+          updateCounts();
+        }, 300);
+      }
+    });
+    function add10Items() {
+      const fragment = document.createDocumentFragment();
+      const currentTotal = parentUl.children.length;
+      for (let i = 1; i <= 10; i++) {
+        const id = currentTotal + i;
+        const li = document.createElement('li');
+        li.innerHTML = `
+                    <span class="user-name">User #${id}</span>
+                    <button class="delete-btn">Delete ${id}</button>
+                `;
+        fragment.appendChild(li);
+      }
+      parentUl.appendChild(fragment);
+      updateCounts();
+      log("Added 10 items. Notice: Listeners stayed at 1!");
+    }
+    function updateCounts() {
+      itemCount.innerText = parentUl.children.length;
+    }
+    // Initialize display
+    updateCounts();
+  </script>
+</body>
+</html>
