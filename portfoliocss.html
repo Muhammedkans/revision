@@ -1,114 +1,111 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
- <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Nexus Mart | Premium Shopping</title>
+  <!-- Link to our CSS file -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts (To make it look Professional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  
-
-  <header class="header">
-
-    <nav class="nav">
-      <a href="#" class="nav__logo">MK</a>
-      <ul class="nav__list">
-        <li><a href="#home" class="nav__link">Home</a></li>
-        <li><a href="#project" class="nav__link">project</a></li>
-        <li><a href="#contact" class="nav__link">contact</a></li>
-          <li class="nav__mode" id="modeBtn">🌙</li>
-      </ul>
-
-    </nav>
-
+  <!-- =======================
+         1. THE HEADER (Navbar)
+         ======================= -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="logo-text">NEXUS</span><span class="logo-accent">MART</span>
+    </div>
+    <div class="search-bar">
+      <!-- Input for searching products -->
+      <input type="text" id="search-input" placeholder="Search for Nike, Apple, etc...">
+      <button id="search-btn">🔍</button>
+    </div>
+    <div class="nav-icons" style="display: flex; gap: 20px; align-items: center;">
+      <!-- Theme Toggle -->
+      <button id="theme-toggle" onclick="toggleTheme()"
+        style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">☀️</button>
+      <!-- The Cart Icon Wrapper -->
+      <div class="cart-icon" onclick="toggleCart()">
+        🛒 <span id="cart-count">0</span> <!-- Badge Number -->
+      </div>
+    </div>
   </header>
-
-  <section class="hero" id="home">
-    <h1 class="hero__title">
-Building Digital
-<br>
-<span class="hero__accent"> Experiences</span>
-    </h1>
-
-
-    <p class="hero__subtitle">
-
-  I am a Professional UI Engineer specializing in clean code and modern aesthetic designs.
-    </p>
-    <a href="#projects" class="hero__btn">View my work</a>
-
+  <!-- =======================
+         2. HERO SECTION (Banner)
+         ======================= -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Discover the <span class="highlight">Future</span> of Shopping.</h1>
+      <p>Best Brands. Best Prices. Delivered Instantly.</p>
+      <button class="cta-btn" onclick="scrollToProducts()">Shop Now</button>
+    </div>
   </section>
-
-
-
-
-
-  <section class="projects" id="projects">
-    <h2 class="projects__title">My Selected Works</h2>
-    
-    <!-- ഗ്രിഡ് കണ്ടെയ്നർ (BLOCK) -->
-    <div class="projects__grid">
-        
-        <!-- ഒന്നാമത്തെ പ്രോജക്റ്റ് (ELEMENT) -->
-        <div class="project-card">
-            <div class="project-card__image">Project 1</div>
-            <div class="project-card__content">
-                <h3 class="project-card__name">E-Commerce App</h3>
-                <p class="project-card__desc">A clean shopping experience built with modern CSS.</p>
-            </div>
-        </div>
-        <!-- രണ്ടാമത്തെ പ്രോജക്റ്റ് -->
-        <div class="project-card">
-            <div class="project-card__image">Project 2</div>
-            <div class="project-card__content">
-                <h3 class="project-card__name">AI Dashboard</h3>
-                <p class="project-card__desc">Visualizing data with beautiful charts and grids.</p>
-            </div>
-        </div>
-        <!-- മൂന്നാമത്തെ പ്രോജക്റ്റ് -->
-        <div class="project-card">
-            <div class="project-card__image">Project 3</div>
-            <div class="project-card__content">
-                <h3 class="project-card__name">Social Platform</h3>
-                <p class="project-card__desc">A dark-themed social app with smooth animations.</p>
-            </div>
-        </div>
+  <!-- =======================
+         3. PRODUCT GRID
+         ======================= -->
+  <section class="products-container">
+    <h2>Trending Products</h2>
+    <!-- We will inject JS Cards here later! -->
+    <div id="product-grid" class="grid"></div>
+  </section>
+  <!-- =======================
+         4. CART SIDEBAR UI
+         ======================= -->
+  <!-- The Dark Background Overlay -->
+  <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+  <!-- The Sliding Drawer -->
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button class="close-btn" onclick="toggleCart()">✖</button>
     </div>
-</section>
-
-
-
-<section class="contact" id="contact">
-    <h2 class="contact__title">Get In Touch</h2>
-    <p class="contact__desc">
-        Have a project in mind? Let's build something amazing together.
-    </p>
-    <!-- കോൺടാക്ട് ബട്ടൺ -->
-    <a href="demo" class="contact__btn">Say Hello</a>
-    
-    <div class="footer">
-        <p>&copy; 2024 . Built with Passion.</p>
+    <!-- Where the Cart Items will be injected by JS -->
+    <div class="cart-items" id="cart-items-container">
+      <p style="text-align: center; color: grey; margin-top: 50px;">Your cart is empty.</p>
     </div>
-</section>
-
-
-
-<script>
-    // 1. ബട്ടണും ബോഡിയും തിരഞ്ഞെടുക്കുന്നു
-    const modeBtn = document.getElementById('modeBtn');
-    const body = document.body;
-    // 2. ബട്ടണിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ എന്ത് സംഭവിക്കണം?
-    modeBtn.addEventListener('click', () => {
-        // ബോഡിയിൽ 'dark' എന്ന ക്ലാസ് ഉണ്ടെങ്കിൽ നീക്കം ചെയ്യും, ഇല്ലെങ്കിൽ ചേർക്കും
-        body.classList.toggle('dark');
-        // ബട്ടണിലെ ഐക്കൺ മാറ്റാം
-        if (body.classList.contains('dark')) {
-            modeBtn.innerText = '☀️'; // ഡാർക്ക് മോഡിൽ സൂര്യൻ കാണിക്കണം
-        } else {
-            modeBtn.innerText = '🌙'; // ലൈറ്റ് മോഡിൽ ചന്ദ്രൻ
-        }
-    });
-</script>
+    <div class="cart-footer">
+      <div class="total-row">
+        <span>Total:</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">Checkout Now</button>
+    </div>
+  </div>
+  <!-- =======================
+         5. PAYMENT MODAL
+         ======================= -->
+  <div class="modal-overlay" id="payment-modal">
+    <div class="payment-box">
+      <div class="modal-header">
+        <h3>Secure Checkout</h3>
+        <button onclick="closeModal()">✖</button>
+      </div>
+      <div class="modal-body">
+        <p>Total Amount: <span id="pay-amount"
+            style="font-weight: bold; color: var(--primary); font-size: 1.2rem;">$0.00</span></p>
+        <div class="input-group">
+          <label>Card Number</label>
+          <input type="text" placeholder="4242 4242 4242 4242">
+        </div>
+        <div class="row" style="display: flex; gap: 10px;">
+          <div class="input-group">
+            <label>Expiry</label>
+            <input type="text" placeholder="MM/YY">
+          </div>
+          <div class="input-group">
+            <label>CVC</label>
+            <input type="text" placeholder="123">
+          </div>
+        </div>
+        <button class="pay-btn" id="pay-btn" onclick="processPayment()">
+          Pay Now 🔒
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Link to our JS file (With 'defer' to run AFTER html loads) -->
+  <script src="script.js" defer></script>
 </body>
 </html>
