@@ -4,3 +4,62 @@
   --main-color: #deab5f;
   --primary-color: #312e2e;
 }
+
+
+
+/* Utility Styles */
+button {
+  padding: 10px 30px;
+  background: var(--main-color);
+  border: none;
+  cursor: pointer;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #c1bdbf;  /* #100e0f; */     
+}
+
+nav{
+  display: flex;
+  justify-content:space-around;
+  align-items:center;
+  padding-top: 20px;
+}
+
+li {
+ display: inline;
+ list-style: none;
+}
+
+li a {
+color: #f44646;
+text-decoration: solid;
+margin-left: 40px;
+}
+
+li a:hover {
+ padding-bottom: 10px;
+  border-bottom: 2px solid #38d1de;
+}
+
+
+.header{
+  background: url("Images/pexels-nao-triponez-129207.jpg");
+ background-position: center;
+ background-size: cover;
+ height: 100vh;
+ font-family: "Playfair Display SC", serif;
+ font-weight: normal;
+ display: flex;
+flex-direction:column;
+justify-content: center;
+align-items: center;
+position:relative;
+text-align: center;
+}
