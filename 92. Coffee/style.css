@@ -62,4 +62,59 @@ justify-content: center;
 align-items: center;
 position:relative;
 text-align: center;
+color: aqua;
 }
+
+
+.main-headings {
+  position: absolute;
+  top: 7rem;
+  font-size: 4rem;
+  word-spacing: 10px;
+}
+
+
+
+.primary-heading {
+  position: absolute;
+  bottom: 4rem;
+  font-size: 4rem;
+  word-spacing: 10px;
+  margin-bottom: -40
+}
+
+
+.main-btn {
+  position :absolute;
+  bottom:2rem;
+  padding:10px 30px;
+  margin-top: 10px;
+  background: transparent;
+  background: var(--main-color);
+  border: none;
+  cursor: pointer;
+  transform: translateY(60px);
+
+}
+
+#our-story{
+margin-top: 15%;
+display: flex;
+flex-wrap: wrap;
+justify-content: space-around;
+align-items: center;
+}
+
+
+.img{
+  width:600px;
+  height: 400px;
+   background: url(Images/pexels-chitokan-2183027-removebg-preview.png);
+  background-position: center;
+  background-size: cover;
+}
+
+
+
+
+
