@@ -45,3 +45,29 @@ users.forEach((user) => {
     console.log(`Sending email to ${user}... ✅`);
     // Logic to send email would go here
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+const users =  [ { id: 1 ,  user: 'Muhammed',  role: 'USER'}, { id: 1 ,  user: 'tony',  role: 'low'} , { id: 1 ,  user: 'Muhammed',  role: 'STAFF'}];
+
+
+const sui = users.findIndex((user)=>{
+      return user.id === 2
+})
+
+if(sui!== -1){
+  users[sui].role  = "siiiiiii"
+}
+
+users[1].role
+
