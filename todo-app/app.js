@@ -1,251 +1,86 @@
 // ==========================================
-// ADVANCED TODO APP - COMPLETE IMPLEMENTATION
+// SIMPLE TODO APP - BEGINNER FRIENDLY
 // ==========================================
 
-// --- STEP 1: STATE (DATA) ---
-// We load our todos from localStorage. If nothing is saved, we start with an empty array [].
-let todos = JSON.parse(localStorage.getItem('todos')) ?? [];
+// 1. STATE (Our Data Drawer)
+// This is a simple array of strings. We load it from local storage, or start empty [].
+let todos = JSON.parse(localStorage.getItem('simple_todos')) || [];
 
-// Keep track of which todo is being edited (null means no todo is currently being edited)
-let editingTodoId = null;
-
-// Keep track of the active filter ('all', 'active', or 'completed')
-let currentFilter = 'all';
-
-// --- STEP 2: DOM ELEMENT REFERENCES ---
-// Grab all the HTML elements we need to interact with
+// 2. DOM ELEMENTS (Wiring up our HTML)
 const todoInput = document.querySelector('#todo-input');
 const addBtn = document.querySelector('#add-btn');
 const todoList = document.querySelector('#todo-list');
-const itemsLeft = document.querySelector('#items-left');
-const clearCompletedBtn = document.querySelector('#clear-completed-btn');
-const filterBtns = document.querySelectorAll('.filter-btn');
 
-// --- STEP 3: RENDER FUNCTION ---
-// Wipes the HTML list clean and rebuilds it based on the current data in our 'todos' array
+// 3. RENDER FUNCTION (Drawing the screen)
 function render() {
-    // 1. Clear the current HTML elements inside the list container to avoid duplication
+    // Clear the board before drawing
     todoList.innerHTML = '';
 
-    // 2. Filter our array of todos based on the currently selected filter category
-    const filteredTodos = todos.filter(todo => {
-        if (currentFilter === 'active') return !todo.completed;
-        if (currentFilter === 'completed') return todo.completed;
-        return true; // if currentFilter is 'all', show everything
-    });
-
-    // 3. Loop through our filtered list of todos and build HTML elements for each one
-    filteredTodos.forEach(todo => {
-        // Create the main wrapper list item <li>
+    // Loop through our list of tasks
+    todos.forEach((task, index) => {
+        // Create a list item <li>
         const li = document.createElement('li');
         li.className = 'todo-item';
-        // Associate the todo's actual ID to the HTML element using a data attribute
-        li.dataset.id = todo.id;
 
-        if (todo.completed) {
-            li.classList.add('completed');
-        }
+        // Create a text span
+        const span = document.createElement('span');
+        span.className = 'todo-text';
+        span.textContent = task; // Set the task text
 
-        // Create the left container (holds checkbox and text/input)
-        const itemLeft = document.createElement('div');
-        itemLeft.className = 'todo-item-left';
-
-        // Create the checkbox
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'todo-checkbox';
-        checkbox.checked = todo.completed;
-
-        itemLeft.appendChild(checkbox);
-
-        // Check if this specific todo is currently in "Edit Mode"
-        if (editingTodoId === todo.id) {
-            // Create an input box instead of text span
-            const editInput = document.createElement('input');
-            editInput.type = 'text';
-            editInput.className = 'edit-input';
-            editInput.value = todo.text;
-            
-            itemLeft.appendChild(editInput);
-
-            // Automatically place focus on the input box so the user can type immediately
-            setTimeout(() => editInput.focus(), 0);
-
-            // Save changes on press of Enter key, cancel on Escape key
-            editInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    saveEdit(todo.id, editInput.value.trim());
-                } else if (e.key === 'Escape') {
-                    cancelEdit();
-                }
-            });
-
-            // Save changes automatically if user clicks away from the input field
-            editInput.addEventListener('blur', () => {
-                saveEdit(todo.id, editInput.value.trim());
-            });
-
-        } else {
-            // Create the regular text span
-            const textSpan = document.createElement('span');
-            textSpan.className = 'todo-text';
-            textSpan.textContent = todo.text;
-            
-            itemLeft.appendChild(textSpan);
-        }
-
-        // Create the delete button
+        // Create a delete button
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'delete-btn';
-        deleteBtn.innerHTML = '&times;'; // Displays the 'X' symbol
+        deleteBtn.innerHTML = '&times;'; // The 'X' symbol
 
-        // Append sub-elements to the main <li>
-        li.appendChild(itemLeft);
+        // When the 'X' button is clicked, delete this task
+        deleteBtn.addEventListener('click', () => {
+            deleteTodo(index);
+        });
+
+        // Glue them together
+        li.appendChild(span);
         li.appendChild(deleteBtn);
-
-        // Finally, add the <li> to our main <ul> container on the screen
         todoList.appendChild(li);
     });
-
-    // 4. Update the items left counter
-    const activeCount = todos.filter(todo => !todo.completed).length;
-    itemsLeft.textContent = `${activeCount} item${activeCount === 1 ? '' : 's'} left`;
-
-    // 5. Toggle visibility of the "Clear Completed" button (hide if no completed items exist)
-    const hasCompleted = todos.some(todo => todo.completed);
-    clearCompletedBtn.style.visibility = hasCompleted ? 'visible' : 'hidden';
 }
 
-// --- STEP 4: STATE MANAGEMENT & MUTATION FUNCTIONS ---
-// These functions modify our 'todos' state array, save it, and trigger a UI redraw
+// 4. ACTION FUNCTIONS (What happens when we do something)
 
-function saveToLocalStorage() {
-    localStorage.setItem('todos', JSON.stringify(todos));
-}
+// Function to add a new task
+function addTodo() {
+    const taskText = todoInput.value.trim(); // Get text and remove empty spaces
 
-function addTodo(text) {
-    if (text === '') return;
-
-    // Create a new todo object using the current timestamp as a unique ID
-    const newTodo = {
-        id: Date.now(),
-        text: text,
-        completed: false
-    };
-
-    todos.push(newTodo);
-    saveToLocalStorage();
-    render();
-}
-
-function toggleTodo(id) {
-    // Find the item with matching ID and invert its boolean status
-    todos = todos.map(todo => {
-        if (todo.id === id) {
-            return { ...todo, completed: !todo.completed };
-        }
-        return todo;
-    });
-    saveToLocalStorage();
-    render();
-}
-
-function deleteTodo(id) {
-    // Keep everything EXCEPT the item that has the matching ID
-    todos = todos.filter(todo => todo.id !== id);
-    saveToLocalStorage();
-    render();
-}
-
-function saveEdit(id, newText) {
-    if (newText === '') {
-        // If text is cleared completely, delete the item
-        deleteTodo(id);
-    } else {
-        // Update the text property of our todo
-        todos = todos.map(todo => {
-            if (todo.id === id) {
-                return { ...todo, text: newText };
-            }
-            return todo;
-        });
-        saveToLocalStorage();
+    if (taskText !== '') {
+        todos.push(taskText); // Add the text directly to the array
+        saveToLocalStorage(); // Save it!
+        render();             // Redraw the screen
+        todoInput.value = ''; // Clear the input box
     }
-    editingTodoId = null; // Exit edit mode
-    render();
 }
 
-function cancelEdit() {
-    editingTodoId = null; // Reset editing target without saving changes
-    render();
+// Function to delete a task using its position (index)
+function deleteTodo(index) {
+    todos.splice(index, 1); // Remove 1 item at the specific position
+    saveToLocalStorage();   // Save it!
+    render();               // Redraw the screen
 }
 
-function clearCompleted() {
-    todos = todos.filter(todo => !todo.completed);
-    saveToLocalStorage();
-    render();
+// Helper function to save our array of strings to local storage
+function saveToLocalStorage() {
+    localStorage.setItem('simple_todos', JSON.stringify(todos));
 }
 
-// --- STEP 5: EVENT LISTENERS ---
+// 5. EVENT LISTENERS (Listening to User Actions)
 
-// Trigger adding a todo when clicking the Add button
-addBtn.addEventListener('click', () => {
-    addTodo(todoInput.value.trim());
-    todoInput.value = ''; // Clear input field
-});
+// Click the "Add" button
+addBtn.addEventListener('click', addTodo);
 
-// Trigger adding a todo when pressing the Enter key inside the input field
+// Press "Enter" inside the input box
 todoInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-        addTodo(todoInput.value.trim());
-        todoInput.value = ''; // Clear input field
+        addTodo();
     }
 });
 
-// Event Delegation for handling checkbox clicks, delete button clicks, and double clicks
-todoList.addEventListener('click', (e) => {
-    const itemElement = e.target.closest('.todo-item');
-    if (!itemElement) return;
-
-    const id = Number(itemElement.dataset.id);
-
-    // If checkbox is clicked
-    if (e.target.classList.contains('todo-checkbox')) {
-        toggleTodo(id);
-    }
-    // If delete button is clicked
-    else if (e.target.classList.contains('delete-btn')) {
-        deleteTodo(id);
-    }
-});
-
-// Double click to enter edit mode
-todoList.addEventListener('dblclick', (e) => {
-    if (e.target.classList.contains('todo-text')) {
-        const itemElement = e.target.closest('.todo-item');
-        if (itemElement) {
-            editingTodoId = Number(itemElement.dataset.id);
-            render();
-        }
-    }
-});
-
-// Clear completed todos
-clearCompletedBtn.addEventListener('click', clearCompleted);
-
-// Handle filter switching
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        // Remove active class from all buttons
-        filterBtns.forEach(b => b.classList.remove('active'));
-        // Add active class to the clicked button
-        e.target.classList.add('active');
-        // Update our active filter category and redraw
-        currentFilter = e.target.dataset.filter;
-        render();
-    });
-});
-
-// --- INITIAL RUN ---
-// Load state and draw the UI when the script runs for the first time
+// 6. INITIAL RUN (Draw the saved tasks when the page loads)
 render();
