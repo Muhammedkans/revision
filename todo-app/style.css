@@ -2,14 +2,15 @@
 
 :root {
     --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-    --panel-bg: rgba(30, 41, 59, 0.75);
+    --panel-bg: rgba(30, 41, 59, 0.7);
     --panel-border: rgba(255, 255, 255, 0.08);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --accent: #6366f1;
     --accent-hover: #4f46e5;
     --danger: #ef4444;
-    --todo-bg: rgba(15, 23, 42, 0.6);
+    --todo-bg: rgba(15, 23, 42, 0.5);
+    --todo-border: rgba(255, 255, 255, 0.05);
 }
 
 * {
@@ -31,90 +32,250 @@ body {
 
 .todo-container {
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
     background: var(--panel-bg);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
     border: 1px solid var(--panel-border);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     background: linear-gradient(to right, #a5b4fc, #818cf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-align: center;
+    letter-spacing: -0.5px;
 }
 
+/* Input Section */
 .input-section {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 24px;
 }
 
 #todo-input {
     flex: 1;
     background: var(--todo-bg);
     border: 1px solid var(--panel-border);
-    padding: 12px 16px;
-    border-radius: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
     color: var(--text-primary);
     font-size: 0.95rem;
     outline: none;
+    transition: all 0.2s ease;
 }
 
 #todo-input:focus {
     border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
 #add-btn {
     background: var(--accent);
     color: white;
     border: none;
-    padding: 0 20px;
-    border-radius: 10px;
+    padding: 0 24px;
+    border-radius: 12px;
     font-weight: 600;
+    font-size: 0.95rem;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 #add-btn:hover {
     background: var(--accent-hover);
+    transform: translateY(-1px);
 }
 
+/* Todo List */
 #todo-list {
     list-style: none;
+    margin-bottom: 20px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Scrollbar styling for list */
+#todo-list::-webkit-scrollbar {
+    width: 6px;
+}
+#todo-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+#todo-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
 }
 
 .todo-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     background: var(--todo-bg);
-    border: 1px solid var(--panel-border);
-    padding: 12px 16px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    border: 1px solid var(--todo-border);
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.7);
+}
+
+/* Checkbox Styling */
+.todo-checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--text-secondary);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    margin-right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.todo-checkbox:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.todo-checkbox:checked::before {
+    content: '✓';
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.todo-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 
 .todo-text {
     font-size: 0.95rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
 }
 
-.delete-btn {
+/* Completed State */
+.todo-item.completed {
+    opacity: 0.6;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+/* Edit Input Mode */
+.edit-input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid var(--accent);
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+/* Actions panel on hover */
+.todo-actions {
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.todo-item:hover .todo-actions {
+    opacity: 1;
+}
+
+.edit-btn, .delete-btn {
     background: transparent;
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    font-size: 1.2rem;
-    padding: 0 4px;
-    transition: color 0.2s ease;
+    font-size: 1.1rem;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-btn:hover {
+    color: var(--accent);
+    background: rgba(99, 102, 241, 0.1);
 }
 
 .delete-btn:hover {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* Footer Section */
+.todo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--panel-border);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.filters {
+    display: flex;
+    gap: 4px;
+}
+
+.filter-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    color: var(--text-primary);
+}
+
+.filter-btn.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+}
+
+#clear-completed-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+#clear-completed-btn:hover {
     color: var(--danger);
 }

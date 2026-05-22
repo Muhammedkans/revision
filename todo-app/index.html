@@ -3,23 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Todo App</title>
+    <title>Advanced Todo App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="todo-container">
         <h1>My Tasks</h1>
         
-        <!-- Input box and Add button -->
+        <!-- Input section -->
         <div class="input-section">
-            <input type="text" id="todo-input" placeholder="Enter a new task..." autocomplete="off">
+            <input type="text" id="todo-input" placeholder="What needs to be done?" autocomplete="off">
             <button id="add-btn">Add</button>
         </div>
 
-        <!-- Simple List for tasks -->
+        <!-- Task List -->
         <ul id="todo-list">
-            <!-- JavaScript will put tasks here -->
+            <!-- JavaScript will dynamically insert tasks here -->
         </ul>
+
+        <!-- Advanced Control Footer -->
+        <div class="todo-footer">
+            <span id="items-left">0 items left</span>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+
+            <button id="clear-completed-btn">Clear Completed</button>
+        </div>
     </div>
 
     <script src="app.js"></script>
