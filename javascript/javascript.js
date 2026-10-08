@@ -1,17 +1,17 @@
 
 
+function createObject(firstName, age, place){
 
-
-function caclculateProduct(numbers) {
-  return numbers.reduce((previous, current) => {
-    return previous + current
-  }, 0)
+  return {
+    firstName : firstName,
+    age:age,
+    place:place,
+    intro: function(){
+      console.log(`hi my name is ${firstName} and my age is ${age}my place is : ${place}`);
+    }
+  }
 }
 
+let muhammed  = createObject("muhammedkans" , 23, "punnala");
+muhammed.intro()
 
-
-const number = [1, 2, 3, 4, 50];
-
-const product = caclculateProduct(number)
-
-console.log(product);
