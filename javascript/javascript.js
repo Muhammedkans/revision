@@ -1,17 +1,18 @@
+function Person(name,age, place){
+  this.name = name;
+  this.age = age;
+  this.place = place;
 
-
-function createObject(firstName, age, place){
-
-  return {
-    firstName : firstName,
-    age:age,
-    place:place,
-    intro: function(){
-      console.log(`hi my name is ${firstName} and my age is ${age}my place is : ${place}`);
-    }
+  this.infoo = function(){
+    console.log(` my name is ${this.name}`)
   }
+
 }
 
-let muhammed  = createObject("muhammedkans" , 23, "punnala");
-muhammed.intro()
+let Person1 = new Person("Muhammedkans", 34,'punnala');
+Person1.infoo()
 
+
+let Person3 = new Person("Mhaaaaaaaaaaaa",12,"PAPAPAPPA")
+
+Person3.infoo()
