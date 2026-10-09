@@ -1,18 +1,32 @@
-function Person(name,age, place){
-  this.name = name;
-  this.age = age;
-  this.place = place;
 
-  this.infoo = function(){
-    console.log(` my name is ${this.name}`)
-  }
+
+class Hero{
+
+
+constructor(name, level ){
+ this.name = name
+ this.level = level
+ this.greet = function (){
+  return ` just for Study purpose ${this.name} and ${this.level} `
+ }
+}
 
 }
 
-let Person1 = new Person("Muhammedkans", 34,'punnala');
-Person1.infoo()
 
+class Mega extends Hero{
+   constructor(name, level, spell){
+       super(name,level);
+       this.spell
+       this.greet = function (){
+  return ` just for Study purpose ${this.name} and ${this.level} and ${spell} `
+ }
+   }
+  
+}
 
-let Person3 = new Person("Mhaaaaaaaaaaaa",12,"PAPAPAPPA")
+const Hero1 = new Hero("Muhammed", 10);
+console.log(Hero1.greet());
 
-Person3.infoo()
+const Mega22 = new Mega("shuiiiiiiiiiiiii", 100,"magic spe;lll");
+console.log(Mega22.greet());
