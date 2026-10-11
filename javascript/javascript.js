@@ -1,32 +1,13 @@
 
+const students =  ["Arun", "subair", "sukoor", "maissoor"];
 
-class Hero{
 
-
-constructor(name, level ){
- this.name = name
- this.level = level
- this.greet = function (){
-  return ` just for Study purpose ${this.name} and ${this.level} `
- }
+function studentFind(students, findstudent){
+    for(let i = 0 ; i < students.length; i++){
+      if(students[i] === findstudent){
+         console.log(`find student ${findstudent}`);
+      }
+    }
 }
 
-}
-
-
-class Mega extends Hero{
-   constructor(name, level, spell){
-       super(name,level);
-       this.spell
-       this.greet = function (){
-  return ` just for Study purpose ${this.name} and ${this.level} and ${spell} `
- }
-   }
-  
-}
-
-const Hero1 = new Hero("Muhammed", 10);
-console.log(Hero1.greet());
-
-const Mega22 = new Mega("shuiiiiiiiiiiiii", 100,"magic spe;lll");
-console.log(Mega22.greet());
+studentFind(students,"Arun");
