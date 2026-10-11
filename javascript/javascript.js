@@ -1,5 +1,10 @@
-function reverseString(reverse){
-   return reverse.split("").reverse().join("")
+
+
+
+function numberReverse(num){
+   const num1 =  num.toString().split("").reverse().join("");
+   return parseInt(num1) * Math.sign(num);
+    
 }
 
-console.log(reverseString("Muhammed"))
+console.log(numberReverse(-4567))
